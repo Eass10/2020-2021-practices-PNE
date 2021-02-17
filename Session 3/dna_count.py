@@ -27,7 +27,7 @@ def DNA_count_2(dna_seq):
             c += 1
     return l, a, g, t, c
 
-dna_seq = "CATGTAGACTAG"
+dna_seq = input("Introduce a DNA sequence: ")
 if correct_seq(dna_seq):
     print("---FIRST FUNCTION---")
     l, A, G, T, C = DNA_count(dna_seq)
