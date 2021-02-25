@@ -32,9 +32,14 @@ def seq_complement(seq):
         string += base
     return string
 
-def processing(seq, base):
-    DNA_bases = ["A", "C", "T", "G"]
-    for base in DNA_base:
-        seq.count(base)
+def processing(seq):
+    from collections import Counter
+    base_list = []
+    for base in seq:
+        base_list.append(base)
+    count = Counter(base_list)
+    most_common_base = count.most_common()[0][0]
+    return most_common_base
+
 
 
