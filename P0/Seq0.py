@@ -40,6 +40,3 @@ def processing(seq):
     count = Counter(base_list)
     most_common_base = count.most_common()[0][0]
     return most_common_base
-
-
-
