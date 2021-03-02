@@ -5,4 +5,6 @@ DNA_bases = ["A", "C", "T", "G"]
 print("---|EXERCISE 8|---")
 for gene in gene_list:
     sequence = Seq0.seq_read_fasta(FOLDER + gene + ".txt")
-    print("For gene " + gene + " the most frequent base is: ", Seq0.processing(sequence))
+    gene_dict = Seq0.seq_count(sequence)
+    base, n = Seq0.processing(gene_dict)
+    print("For gene " + gene + " the most frequent base is " + base + " with " + str(n) + " repetitions.")

@@ -32,11 +32,9 @@ def seq_complement(seq):
         string += base
     return string
 
-def processing(seq):
-    from collections import Counter
-    base_list = []
-    for base in seq:
-        base_list.append(base)
-    count = Counter(base_list)
-    most_common_base = count.most_common()[0][0]
-    return most_common_base
+def processing(gene_dict):
+    list_values = gene_dict.values()
+    most_common_base = max(list_values)
+    for base, n in gene_dict.items():
+        if n == most_common_base:
+            return base, n
