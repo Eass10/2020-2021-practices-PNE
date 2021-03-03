@@ -1,27 +1,14 @@
-class Seq:
-    """A class for representing sequences"""
-    def __init__(self, strbases):
-        self.strbases = strbases
-        print("New sequence created!")
-
-    def __str__(self):
-        """Method called when the object is being printed"""
-        return self.strbases
-
-    def len(self):
-        return len(self.strbases)
+from Seq1_ex import Seq
 
 def generate_seqs(pattern, number):
-    seq = ""
     seq_list = []
     for i in range(0, number):
-        seq += pattern
-        seq_list.append(Seq(seq))
+        seq_list.append(Seq(pattern * (i + 1)))
     return seq_list
 
 def print_seqs(seq_list):
-    for seq in seq_list:
-        print(f"Sequence {seq_list.index(seq)}: (Length: {Seq.len(seq)}) {seq}")
+    for i in range(0, len(seq_list)):
+        print("Sequence", i, "(Length:",  Seq.len(seq_list[i]), ")", seq_list[i])
 
 seq_list1 = generate_seqs("A", 3)
 seq_list2 = generate_seqs("AC", 5)
