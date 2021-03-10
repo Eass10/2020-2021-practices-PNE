@@ -1,7 +1,9 @@
 class Seq:
-    """A class for representing sequences"""
-    def __init__(self, strbases="NULL"):
-        if strbases == "NULL":
+    NULL_SEQUENCE = "NULL"
+    INVALID_SEQUENCE = "ERROR"
+
+    def __init__(self, strbases=NULL_SEQUENCE):
+        if strbases == Seq.NULL_SEQUENCE:
             print("NULL seq created")
             self.strbases = strbases
         else:
@@ -9,7 +11,7 @@ class Seq:
                 print("New sequence created!")
                 self.strbases = strbases
             else:
-                self.strbases = "ERROR"
+                self.strbases = Seq.INVALID_SEQUENCE
                 print("Incorrect sequence detected")
 
     @staticmethod
@@ -23,14 +25,14 @@ class Seq:
         return self.strbases
 
     def len(self):
-        if self.strbases == "NULL" or self.strbases == "ERROR":
+        if self.strbases == Seq.NULL_SEQUENCE or self.strbases == Seq.INVALID_SEQUENCE:
             return 0
         else:
             return len(self.strbases)
 
     def count_base(self):
         gene_dict = {"A": 0, "C": 0, "T": 0, "G": 0}
-        if self.strbases == "NULL" or self.strbases == "ERROR":
+        if self.strbases == Seq.NULL_SEQUENCE or self.strbases == Seq.INVALID_SEQUENCE:
             return gene_dict
         else:
             for base in self.strbases:
@@ -46,29 +48,34 @@ class Seq:
                 return base, n
 
     def seq_reverse(self):
-        if self.strbases == "NULL":
-            return "NULL"
-        elif self.strbases == "ERROR":
-            return "ERROR"
+        if self.strbases == Seq.NULL_SEQUENCE:
+            return Seq.NULL_SEQUENCE
+        elif self.strbases == Seq.INVALID_SEQUENCE:
+            return Seq.INVALID_SEQUENCE
         else:
             return self.strbases[::-1]
 
     def seq_complement(self):
         comp_dict = {"A": "T", "C": "G", "T": "A", "G": "C"}
         string = ""
-        if self.strbases == "NULL":
-            return "NULL"
-        elif self.strbases == "ERROR":
-            return "ERROR"
+        if self.strbases == Seq.NULL_SEQUENCE:
+            return Seq.NULL_SEQUENCE
+        elif self.strbases == Seq.INVALID_SEQUENCE:
+            return Seq.INVALID_SEQUENCE
         else:
             for base in self.strbases:
                 base = comp_dict[base]
                 string += base
             return string
 
-    @staticmethod
-    def seq_read_fasta(Filename):
+    def seq_read_fasta(self, Filename):
         from pathlib import Path
-        seq = Path(Filename).read_text()
-        seq = Seq(seq[seq.index("\n"):].replace("\n", ""))
-        return seq
+        sequence = Path(Filename).read_text()
+        self.strbases = sequence[sequence.index("\n"):].replace("\n", "")
+        return self.strbases
+
+def test_sequence():
+    s1 = Seq("ACTGA")
+    s2 = Seq()
+    s3 = Seq("ACTXG")
+    return s1, s2, s3
