@@ -74,6 +74,13 @@ class Seq:
         self.strbases = sequence[sequence.index("\n"):].replace("\n", "")
         return self.strbases
 
+    @staticmethod
+    def seq_read_fasta_2(Filename):
+        from pathlib import Path
+        sequence = Path(Filename).read_text()
+        sequence = (sequence[sequence.index("\n"):].replace("\n", ""))
+        return sequence
+
 def test_sequence():
     s1 = Seq("ACTGA")
     s2 = Seq()
