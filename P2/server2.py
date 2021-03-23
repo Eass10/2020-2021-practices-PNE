@@ -31,6 +31,7 @@ try:
         msg = clientsocket.recv(2048).decode("utf-8")
         print("Message from client: {}".format(msg))
 
+
         # Send the messag
         message = "Hello from the teacher's server"
         # We must write bytes, not a string
