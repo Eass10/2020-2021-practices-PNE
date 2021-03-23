@@ -1,6 +1,8 @@
 from Client0 import Client
 from pathlib import Path
 from Seq2 import Seq
+import colorama
+from termcolor import colored
 print("---|PRACTICE 2: EXERCISE 6|---")
 
 IP = "127.0.0.1"
@@ -14,6 +16,7 @@ s.seq_read_fasta("./Sequences/FRAT1.txt")
 count = 0
 i = 0
 while i < len(s.strbases) and count < 10:
+    colorama.init(strip = "False")
     fragment = s.strbases[i:i+10]
     count += 1
     i += 10

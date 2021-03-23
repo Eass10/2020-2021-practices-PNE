@@ -1,4 +1,7 @@
 import socket
+from termcolor import colored
+import colorama
+
 # Configure the Server's IP and PORT
 PORT = 12000
 IP = "127.0.0.1"
@@ -16,6 +19,7 @@ try:
     serversocket.listen(MAX_OPEN_REQUESTS)
 
     while True:
+        colorama.init(strip="False")
         # accept connections from outside
         print("Waiting for connections at {}, {} ".format(IP, PORT))
         (clientsocket, address) = serversocket.accept()
@@ -28,7 +32,7 @@ try:
 
         # Read the message from the client, if any
         msg = clientsocket.recv(2048).decode("utf-8")
-        print("Message from client: {}".format(msg))
+        print("Message from client: {}".format(colored(msg, "yellow")))
 
 
         # Send the messag
