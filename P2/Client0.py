@@ -23,12 +23,12 @@ class Client:
         return "Connection to SERVER at " + self.ip + ", PORT: " + str(self.port)
 
     def talk(self, msg):
-        colorama.init(strip = "False")
+        colorama.init(strip="False")
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.connect((self.ip, self.port))
         #print("To server:", msg_coloured)
         s.send(str.encode(colored(msg, "yellow")))
-        response = (s.recv(2048).decode("utf-8"))
+        response = s.recv(2048).decode("utf-8")
         s.close()
         return response
 

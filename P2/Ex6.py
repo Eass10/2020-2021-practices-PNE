@@ -1,5 +1,4 @@
 from Client0 import Client
-from pathlib import Path
 from Seq2 import Seq
 print("---|PRACTICE 2: EXERCISE 6|---")
 

@@ -32,7 +32,7 @@ try:
 
         # Read the message from the client, if any
         msg = clientsocket.recv(2048).decode("utf-8")
-        print("Message from client: {}".format(colored(msg, "red")))
+        print("Message from client: {}".format(colored(msg, "yellow")))
 
 
         # Send the messag
