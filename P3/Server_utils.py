@@ -1,76 +1,80 @@
 from Seq3 import Seq
+import termcolor
+import colorama
+
 
 def print_colored(message, color):
-    import termcolor
-    import colorama
     colorama.init(strip="False")
     print(termcolor.colored(message, color))
+
 
 def format_command(command):
     return command .replace("\n", "").replace("\r", "")
 
+
 def ping(cs):
     print_colored("PING command", "green")
     response = "OK!"
+    print(response)
     cs.send(response.encode())
 
-def Get(list_sequences, cs, argument):
+
+def get(list_sequences, cs, argument):
     print_colored("GET " + str(argument.replace('"', "")), "yellow")
     response = list_sequences[int(argument.replace("'", "").replace('"', ""))]
     print_colored(response, "red")
+    print(response)
     cs.send(response.encode())
+
 
 def info(argument, cs):
     print_colored("INFO", "yellow")
     list_bases = ["A", "C", "T", "G"]
     argument = Seq(argument.replace('"', ""))
-    response1 = "Sequence: " + str(argument) + "\n"
-    print_colored(response1, "red")
-    response2 = "Total length: " + str(Seq.len(argument)) + "\n"
-    print_colored(response2, "blue")
-    cs.send((response1 + response2).encode())
-    seq_info = Seq.count_base(argument)
+    t_l = Seq.len(argument)
+    count_list = []
+    percentage_list = []
     for base in list_bases:
-        response = base + ": " + str(seq_info[0][base]) + " (" + str(seq_info[1][list_bases.index(base)]) + "%)" + "\n"
-        # cs.send(str(response).encode())
-        print(response)
+        count_list.append(argument.count_base_1(base))
+    for i in range(0, len(count_list)):
+        percentage_list.append(count_list[i] * 100 / t_l)
+    response = f"""Sequence: {argument}
+    Total length: {t_l}
+    A: {count_list[0]} ({percentage_list[0]}%)
+    C: {count_list[1]} ({percentage_list[0]}%)
+    G: {count_list[2]} ({percentage_list[0]}%)
+    T: {count_list[3]} ({percentage_list[0]}%)"""
+    cs.send(response.encode())
+    print(response)
+
 
 def comp(argument, cs):
     print_colored("COMP", "yellow")
     argument = Seq(argument.replace('"', ""))
-    # Initial sequence:
-    response = "Initial sequence: " + str(argument) + "\n"
-    # cs.send(response.encode())
-    print_colored(response, "red")
-    # Complement sequence:
-    response = "Complement sequence: " + str(Seq.seq_complement(argument))
+    comp_seq = str(Seq.seq_complement(argument))
+    response = f"""Initial sequence: {termcolor.colored(argument, "red")}
+    Complement sequence: {termcolor.colored(comp_seq, "green")}"""
     cs.send(response.encode())
-    print_colored(response, "blue")
+    print(response)
+
 
 def rev(argument, cs):
     print_colored("REV", "yellow")
     argument = Seq(argument.replace('"', ""))
-    # Initial sequence:
-    response = "Initial sequence: " + str(argument) + "\n"
-    # cs.send(response.encode())
-    print_colored(response, "red")
-    # Reverse sequence:
-    response = "Reverse sequence: " + str(Seq.seq_reverse(argument))
+    rev_seq = str(Seq.seq_reverse(argument))
+    response = f"""Initial sequence: {termcolor.colored(argument, "red")}
+    Reverse sequence: {termcolor.colored(rev_seq, "blue")}"""
     cs.send(response.encode())
-    print_colored(response, "green")
+    print(response)
+
 
 def gene(argument, cs):
+    print_colored("GENE", "yellow")
     sequence = Seq(Seq.seq_read_fasta_2("./Sequences/" + argument.replace('"', "") + ".txt"))
-    # Initial sequence:
-    response1 = "Initial sequence: " + str(sequence) + "\n"
-    # cs.send(response.encode())
-    print_colored(response1, "red")
-    # Complement sequence:
-    response2 = "Complement sequence: " + str(Seq.seq_complement(sequence)) + "\n"
-    # cs.send(response.encode())
-    print_colored(response2, "blue")
-    # Reverse sequence:
-    response3 = "Reverse sequence: " + str(Seq.seq_reverse(sequence))
-    print_colored(response3, "green")
-    response = response1 + "\n" + response2 + "\n" + response3
+    comp_seq = str(Seq.seq_complement(sequence))
+    rev_seq = str(Seq.seq_reverse(sequence))
+    response = f"""Initial sequence: {termcolor.colored(sequence, "red")}
+    Complement sequence: {termcolor.colored(comp_seq, "green")}
+    Reverse sequence: {termcolor.colored(rev_seq, "blue")}"""
     cs.send(response.encode())
+    print(response)

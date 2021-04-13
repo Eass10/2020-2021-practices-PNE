@@ -1,6 +1,7 @@
 import socket
 import Server_utils
-from Seq3 import Seq
+import termcolor
+
 list_sequences = ["AAAA", "CCCC", "TTTT", "GGGG", "ACTG"]
 # gene_list = ["U5", "ADA", "FRAT1", "FXN", "RNU6_269P"]
 PORT = 8080
@@ -33,11 +34,12 @@ while True:
     else:
         command = formatted_msg[0] + '"'
         argument = '"' + formatted_msg[1]
+
     if command == '"PING"':
         Server_utils.ping(cs)
 
     elif command == '"GET"':
-        Server_utils.Get(list_sequences, cs, argument)
+        Server_utils.get(list_sequences, cs, argument)
 
     elif command == '"INFO"':
         Server_utils.info(argument, cs)
@@ -53,5 +55,5 @@ while True:
 
     else:
         response = "Not available command"
+        termcolor.cprint(response, "red")
         cs.send(response.encode())
-    cs.close()

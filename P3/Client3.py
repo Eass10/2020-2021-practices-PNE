@@ -2,6 +2,7 @@ import socket
 from termcolor import colored
 import colorama
 
+
 class Client:
     def __init__(self, ip, port):
         self.ip = ip

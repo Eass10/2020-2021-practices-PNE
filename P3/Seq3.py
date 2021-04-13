@@ -30,7 +30,10 @@ class Seq:
         else:
             return len(self.strbases)
 
-    def count_base(self):
+    def count_base_1(self, base):
+        return self.strbases.count(base)
+
+    def count_base_2(self):
         gene_dict = {"A": 0, "C": 0, "T": 0, "G": 0}
         list_bases = ["A", "C", "T", "G"]
         list_percentages = []
@@ -74,18 +77,19 @@ class Seq:
                 string += base
             return string
 
-    def seq_read_fasta(self, Filename):
+    def seq_read_fasta(self, filename):
         from pathlib import Path
-        sequence = Path(Filename).read_text()
+        sequence = Path(filename).read_text()
         self.strbases = sequence[sequence.index("\n"):].replace("\n", "")
         return self.strbases
 
     @staticmethod
-    def seq_read_fasta_2(Filename):
+    def seq_read_fasta_2(filename):
         from pathlib import Path
-        sequence = Path(Filename).read_text()
+        sequence = Path(filename).read_text()
         sequence = (sequence[sequence.index("\n"):].replace("\n", ""))
         return sequence
+
 
 def test_sequence():
     s1 = Seq("ACTGA")
