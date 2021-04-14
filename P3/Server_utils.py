@@ -9,7 +9,7 @@ def print_colored(message, color):
 
 
 def format_command(command):
-    return command .replace("\n", "").replace("\r", "")
+    return command.replace("\n", "").replace("\r", "")
 
 
 def ping(cs):
@@ -52,8 +52,8 @@ def comp(argument, cs):
     print_colored("COMP", "yellow")
     argument = Seq(argument.replace('"', ""))
     comp_seq = str(Seq.seq_complement(argument))
-    response = f"""Initial sequence: {termcolor.colored(argument, "red")}
-    Complement sequence: {termcolor.colored(comp_seq, "green")}"""
+    response = f"""Initial sequence: {argument}
+    Complement sequence: {comp_seq}"""
     cs.send(response.encode())
     print(response)
 
@@ -62,8 +62,8 @@ def rev(argument, cs):
     print_colored("REV", "yellow")
     argument = Seq(argument.replace('"', ""))
     rev_seq = str(Seq.seq_reverse(argument))
-    response = f"""Initial sequence: {termcolor.colored(argument, "red")}
-    Reverse sequence: {termcolor.colored(rev_seq, "blue")}"""
+    response = f"""Initial sequence: {argument}
+    Reverse sequence: {rev_seq}"""
     cs.send(response.encode())
     print(response)
 
@@ -73,8 +73,11 @@ def gene(argument, cs):
     sequence = Seq(Seq.seq_read_fasta_2("./Sequences/" + argument.replace('"', "") + ".txt"))
     comp_seq = str(Seq.seq_complement(sequence))
     rev_seq = str(Seq.seq_reverse(sequence))
-    response = f"""Initial sequence: {termcolor.colored(sequence, "red")}
+    colored_response = f"""Initial sequence: {termcolor.colored(sequence, "red")}
     Complement sequence: {termcolor.colored(comp_seq, "green")}
     Reverse sequence: {termcolor.colored(rev_seq, "blue")}"""
+    response = f"""Initial sequence: {sequence}
+    Complement sequence: {comp_seq}
+    Reverse sequence: {rev_seq}"""
     cs.send(response.encode())
     print(response)
