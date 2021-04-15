@@ -1,7 +1,6 @@
 import Client3
 
 c = Client3.Client("127.0.0.1", 8080)
-command_list = ['"PING"', '"GET"', '"INFO"', '"COMP"', '"REV"', '"GENE"']
 
 print("Testing Ping...")
 c.talk('"PING"')
