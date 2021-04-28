@@ -66,6 +66,7 @@ def comp(sequence):
     contents = read_template_html_file(HTML_ASSETS + "operation.html").render(context=context)
     return contents
 
+
 def rev(sequence):
     argument = Seq(sequence.replace('"', ""))
     rev_seq = str(Seq.seq_reverse(argument))
@@ -76,7 +77,6 @@ def rev(sequence):
     }
     contents = read_template_html_file(HTML_ASSETS + "operation.html").render(context=context)
     return contents
-
 
 
 def gene(gene):

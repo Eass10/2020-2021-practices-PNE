@@ -5,7 +5,6 @@ import colorama
 import Server_utils as su
 from urllib.parse import urlparse, parse_qs
 
-
 # Define the Server's port
 PORT = 8080
 
@@ -16,24 +15,6 @@ LIST_SEQ = ["AAAA", "CCCC", "TTTT", "GGGG", "ACTG"]
 LIST_GENE = ["U5", "ADA", "FRAT1", "FXN", "RNU6_269P"]
 OPERATION_LIST = ["info", "comp", "rev"]
 
-BASES_INFORMATION = {
-    "A": {"name": "ADENINE",
-          "formula": "C5H5N5",
-          "link": "https://en.wikipedia.org/wiki/Adenine",
-          "color": "lightgreen"},
-    "C": {"name": "CITOSINE",
-          "formula": "C4H5N3O",
-          "link": "https://en.wikipedia.org/wiki/Citosine",
-          "color": "yellow"},
-    "G": {"name": "GUANINE",
-          "formula": "C5H5N5O",
-          "link": "https://en.wikipedia.org/wiki/Guanine",
-          "color": "lightblue"},
-    "T": {"name": "TIMINE",
-          "formula": "C5H5N2O2",
-          "link": "https://en.wikipedia.org/wiki/Timine",
-          "color": "pink"}
-}
 # -- This is for preventing the error: "Port already in use"
 socketserver.TCPServer.allow_reuse_address = True
 
