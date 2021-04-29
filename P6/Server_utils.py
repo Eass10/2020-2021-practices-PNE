@@ -41,14 +41,16 @@ def info(sequence):
         count_list.append(sequence.count_base_1(base))
     for i in range(0, len(count_list)):
         percentage_list.append(count_list[i] * 100 / t_l)
-    result = f"""Total length: {t_l}
-        A: {count_list[0]} ({percentage_list[0]}%)
-        C: {count_list[1]} ({percentage_list[0]}%)
-        G: {count_list[2]} ({percentage_list[0]}%)
-        T: {count_list[3]} ({percentage_list[0]}%)"""
     context = {
         "sequence": sequence,
-        "result": result,
+        "result": {
+            "length": t_l, "bases": {
+                "A": str(count_list[0]) + " (" + str(percentage_list[0]) + "%)",
+                "C": str(count_list[1]) + " (" + str(percentage_list[1]) + "%)",
+                "T": str(count_list[2]) + " (" + str(percentage_list[2]) + "%)",
+                "G": str(count_list[3]) + " (" + str(percentage_list[3]) + "%)"
+            }
+        },
         "operation": "Info"
     }
     contents = read_template_html_file(HTML_ASSETS + "operation.html").render(context=context)

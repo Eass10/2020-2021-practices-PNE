@@ -9,7 +9,14 @@
             <h1>Operation:</h1>
             <p>{{context.operation}}</p>
             <h1>Result:</h1>
+            {% if context.operation.lower() == "info" %}
+                <p>Total length: {{context.result.length}}</p>
+                {% for key, value in context.result.bases.items() %}
+                    <p>{{key}}: {{value}}</p>
+                {% endfor %}
+            {% else %}
             <p>{{context.result}}</p>
+            {% endif %}
             <a href="/">Main page</a>
         </body>
     </html>
