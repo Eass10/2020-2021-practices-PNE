@@ -1,0 +1,47 @@
+[
+  {
+    "Firstname": "Troll",
+    "Lastname": "Face",
+    "age": 20,
+    "phoneNumber": [
+      {
+        "number": "1111",
+        "type": "home"
+      },
+      {
+        "number": "333",
+        "type": "office"
+      }
+    ]
+  },
+  {
+    "Firstname": "Bruto",
+    "Lastname": "Briz",
+    "age": 20,
+    "phoneNumber": [
+      {
+        "number": "4444",
+        "type": "home"
+      }
+    ]
+  },
+  {
+    "Firstname": "Pepa",
+    "Lastname": "Pig",
+    "age": 20,
+    "phoneNumber": [
+      {
+        "number": "2121",
+        "type": "home"
+      },
+      {
+        "number": "777",
+        "type": "office"
+      },
+      {
+        "number": "789",
+        "type": "fortnite"
+      }
+    ]
+  }
+]
