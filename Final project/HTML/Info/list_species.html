@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <title>DATABASE: LIST SSPECIES</title>
+        </head>
+        <body style="background-color: lightgreen;">
+            <h1>List of species</h1>
+            <h4>{{context.failure}}</h4>
+            {% if context.limit <= context.amount_species or context.limit == context.amount_species %}
+            <h4>Total species in the ensembl database: {{context.amount_species}}</h4>
+            <h4>Limit you have chosen: {{context.limit}}</h4>
+            <h4>List of species:</h4>
+                {% for n in context.names %}
+                  <option value="{{n}}">{{n}}</option>
+                {% endfor %}
+            {% elif context.limit >= context.amount_species %}
+                <h4>Sorry. We do not have {{context.limit}} species in our database but only {{context.amount_species}} . Because of the inconvinience, here you have all of them."</h4>
+                <h4>List of species:</h4>
+                {% for n in context.names %}
+                  <option value="{{n}}">{{n}}</option>
+                {% endfor %}
+            {% endif %}
+            <a href="/">Main page</a>
+        </body>
+    </html>
+
+
