@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <title>DATABASE: CALCULATIONS WITH GENES</title>
+        </head>
+        <body style="background-color: lightgreen;">
+            <h1>Info of gene: {{context.gene}}</h1>
+            <p>Total length: {{context.length}}</p>
+                {% for key, value in context.bases.items() %}
+                    <p>{{key}}: {{value}}</p>
+                {% endfor %}
+            <a href="/">Main page</a>
+        </body>
+    </html>

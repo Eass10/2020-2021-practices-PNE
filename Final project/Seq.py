@@ -44,7 +44,7 @@ class Seq:
                 gene_dict[base] += 1
             total = gene_dict["A"] + gene_dict["C"] + gene_dict["T"] + gene_dict["G"]
             for base in list_bases:
-                percentage = gene_dict[base] * 100 / total
+                percentage = round(gene_dict[base] * 100 / total, 2)
                 list_percentages.append(percentage)
             return gene_dict, list_percentages
 

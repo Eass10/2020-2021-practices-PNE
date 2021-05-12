@@ -6,7 +6,6 @@ import Server_utils as su
 import Server_utils_2 as su2
 from urllib.parse import urlparse, parse_qs
 import http.client
-import json
 
 
 # Define the Server's port
@@ -15,9 +14,18 @@ PORT = 8080
 HTML_ASSETS = "./HTML/info/"
 HTML = "./HTML/"
 
-LIST_SEQ = ["AAAA", "CCCC", "TTTT", "GGGG", "ACTG"]
-LIST_GENE = ["U5", "ADA", "FRAT1", "FXN", "RNU6_269P"]
-OPERATION_LIST = ["info", "comp", "rev"]
+DICT_GENES = {
+    "FRAT1": "ENSG00000165879",
+    "ADA": "ENSG00000196839",
+    "FXN": "ENSG00000165060",
+    "RNU6_269P": "ENSG00000212379",
+    "MIR633": "ENSG00000207552",
+    "TTTY4C": "ENSG00000226906",
+    "RBMY2YP": "ENSG00000227633",
+    "FGFR3": "ENSG00000068078",
+    "KDR": "ENSG00000128052",
+    "ANK2": "ENSG00000145362"
+}
 
 SERVER = "rest.ensembl.org"
 PARAMS = "?content-type=application/json"
@@ -53,18 +61,31 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         # that everything is ok
         # Message to send back to the client
         context = {}
-        if path_name == "/":
-            contents = su.read_template_html_file(HTML_ASSETS + "index.html").render()
-        elif path_name == "/listSpecies":
-            ENDPOINT = "/info/species"
-            contents = su2.list_seqs(connection, ENDPOINT, PARAMS, arguments, context)
-        elif path_name == "/karyotype":
-            ENDPOINT = "info/assembly/"
-            contents = su2.karyotype(connection, ENDPOINT, PARAMS, arguments, context)
-        elif path_name == "/chromosomeLength":
-            ENDPOINT = "info/assembly/"
-            contents = su2.chromosome_length(connection, ENDPOINT, PARAMS, arguments, context)
-        else:
+        try:
+            if path_name == "/":
+                context["genes"] = DICT_GENES.keys()
+                contents = su.read_template_html_file(HTML_ASSETS + "index.html").render(context=context)
+            elif path_name == "/listSpecies":
+                ENDPOINT = "/info/species"
+                contents = su2.list_seqs(connection, ENDPOINT, PARAMS, arguments, context)
+            elif path_name == "/karyotype":
+                ENDPOINT = "info/assembly/"
+                contents = su2.karyotype(connection, ENDPOINT, PARAMS, arguments, context)
+            elif path_name == "/chromosomeLength":
+                ENDPOINT = "info/assembly/"
+                contents = su2.chromosome_length(connection, ENDPOINT, PARAMS, arguments, context)
+            elif path_name == "/geneSeq":
+                ENDPOINT = "/sequence/id/"
+                contents = su2.geneSeq(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES)
+            elif path_name == "/geneInfo":
+                ENDPOINT = "/sequence/id/"
+                contents = su2.geneInfo(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES)
+            elif path_name == "/geneCalc":
+                ENDPOINT = "/sequence/id/"
+                contents = su2.geneCalc(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES)
+            else:
+                contents = su.read_template_html_file(HTML + "ERROR.html").render()
+        except KeyError:
             contents = su.read_template_html_file(HTML + "ERROR.html").render()
 
 

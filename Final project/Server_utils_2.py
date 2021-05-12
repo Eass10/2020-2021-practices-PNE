@@ -1,11 +1,11 @@
-import http.server
-import socketserver
-import termcolor
-import colorama
 import Server_utils as su
-from urllib.parse import urlparse, parse_qs
-import http.client
 import json
+from Seq import Seq
+
+
+def taking_out_space(specie):
+    answer = specie.replace(" ", "_")
+    return answer
 
 
 def list_seqs (connection, ENDPOINT, PARAMS, arguments, context):
@@ -21,7 +21,6 @@ def list_seqs (connection, ENDPOINT, PARAMS, arguments, context):
             for n in range(0, limit):
                 species_list.append(response_dict["species"][n]["common_name"])
             context["names"] = species_list
-
         else:
             for n in range(0, amount_species):
                 species_list.append(response_dict["species"][n]["common_name"])
@@ -33,7 +32,8 @@ def list_seqs (connection, ENDPOINT, PARAMS, arguments, context):
 
 
 def karyotype(connection, ENDPOINT, PARAMS, arguments, context):
-    connection.request("GET", ENDPOINT + arguments["species"][0] + PARAMS)
+    specie = taking_out_space(arguments["species"][0])
+    connection.request("GET", ENDPOINT + specie + PARAMS)
     response = connection.getresponse()
     if response.status == 200:
         response_dict = json.loads(response.read().decode())
@@ -47,7 +47,8 @@ def karyotype(connection, ENDPOINT, PARAMS, arguments, context):
 
 
 def chromosome_length(connection, ENDPOINT, PARAMS, arguments, context):
-    connection.request("GET", ENDPOINT + arguments["species"][0] + PARAMS)
+    specie = taking_out_space(arguments["species"][0])
+    connection.request("GET", ENDPOINT + specie + PARAMS)
     response = connection.getresponse()
     if response.status == 200:
         response_dict = json.loads(response.read().decode())
@@ -61,4 +62,59 @@ def chromosome_length(connection, ENDPOINT, PARAMS, arguments, context):
         context["chromosome"] = chromosome
         context["length"] = length
         contents = su.read_template_html_file("./HTML/info/chromosome_length.html").render(context=context)
+        return contents
+
+
+def geneSeq(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES):
+    gene = arguments["gene"][0]
+    id = DICT_GENES[gene]
+    connection.request("GET", ENDPOINT + id + PARAMS)
+    response = connection.getresponse()
+    if response.status == 200:
+        response_dict = json.loads(response.read().decode())
+        print(json.dumps(response_dict, indent=4, sort_keys=True))
+        context["gene"] = arguments["gene"][0]
+        context["seq"] = response_dict["seq"]
+        contents = su.read_template_html_file("HTML/Info/geneSeq.html").render(context=context)
+        return contents
+
+
+def geneInfo(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES):
+    gene = arguments["gene"][0]
+    id = DICT_GENES[gene]
+    connection.request("GET", ENDPOINT + id + PARAMS)
+    response = connection.getresponse()
+    if response.status == 200:
+        response_dict = json.loads(response.read().decode())
+        print(json.dumps(response_dict, indent=4, sort_keys=True))
+        info = response_dict["desc"].split(":")
+        context["gene"] = gene
+        context["dict_info"] = {
+            "Name": info[1],
+            "ID": id,
+            "Start": info[3],
+            "End": info[4],
+            "Length": (int(info[4]) - int(info[3]) + 1)
+        }
+        contents = su.read_template_html_file("HTML/Info/geneInfo.html").render(context=context)
+        return contents
+
+def geneCalc(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES):
+    gene = arguments["gene"][0]
+    id = DICT_GENES[gene]
+    connection.request("GET", ENDPOINT + id + PARAMS)
+    response = connection.getresponse()
+    if response.status == 200:
+        response_dict = json.loads(response.read().decode())
+        print(json.dumps(response_dict, indent=4, sort_keys=True))
+        sequence = Seq(response_dict["seq"])
+        dict_bases, percentage_list = Seq.count_base_2(sequence)
+        context["length"] = Seq.len(sequence)
+        context["bases"] = {
+            "A": str(dict_bases["A"]) + " (" + str(percentage_list[0]) + "%)",
+            "C": str(dict_bases["C"]) + " (" + str(percentage_list[1]) + "%)",
+            "T": str(dict_bases["T"]) + " (" + str(percentage_list[2]) + "%)",
+            "G": str(dict_bases["G"]) + " (" + str(percentage_list[3]) + "%)"
+        }
+        contents = su.read_template_html_file("HTML/Info/geneCalc.html").render(context=context)
         return contents
