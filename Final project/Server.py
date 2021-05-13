@@ -5,6 +5,7 @@ import colorama
 import Server_utils as su
 import Server_utils_2 as su2
 from urllib.parse import urlparse, parse_qs
+from pathlib import Path
 import http.client
 
 
@@ -41,7 +42,8 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
     def do_GET(self):
         global contents
-        colorama.init(strip="False")
+        global cont_type
+        # colorama.init(strip="False")
         """This method is called whenever the client invokes the GET method
         in the HTTP protocol request"""
 
@@ -61,46 +63,56 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         # that everything is ok
         # Message to send back to the client
         context = {}
-        try:
-            if path_name == "/":
-                context["genes"] = DICT_GENES.keys()
-                contents = su.read_template_html_file(HTML_ASSETS + "index.html").render(context=context)
-            elif path_name == "/listSpecies":
-                ENDPOINT = "/info/species"
-                contents = su2.list_seqs(connection, ENDPOINT, PARAMS, arguments, context)
-            elif path_name == "/karyotype":
-                ENDPOINT = "info/assembly/"
-                contents = su2.karyotype(connection, ENDPOINT, PARAMS, arguments, context)
-            elif path_name == "/chromosomeLength":
-                ENDPOINT = "info/assembly/"
-                contents = su2.chromosome_length(connection, ENDPOINT, PARAMS, arguments, context)
-            elif path_name == "/geneSeq":
-                ENDPOINT = "/sequence/id/"
-                contents = su2.geneSeq(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES)
-            elif path_name == "/geneInfo":
-                ENDPOINT = "/sequence/id/"
-                contents = su2.geneInfo(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES)
-            elif path_name == "/geneCalc":
-                ENDPOINT = "/sequence/id/"
-                contents = su2.geneCalc(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES)
+        """try:"""
+        if path_name == "/":
+            cont_type = 'text/html'
+            context["genes"] = DICT_GENES.keys()
+            contents = su.read_template_html_file(HTML_ASSETS + "index.html").render(context=context)
+        elif path_name == "/listSpecies":
+            ENDPOINT = "/info/species"
+            if "json" in arguments.keys():
+                if arguments["json"][0] == "1":
+                    su2.list_seqs(connection, ENDPOINT, PARAMS, arguments, context)
+                    contents = Path("context.json").read_text()
+                    cont_type = 'application/json'
+                    # contents = su2.list_seqs(connection, ENDPOINT, PARAMS, arguments, context)
             else:
-                contents = su.read_template_html_file(HTML + "ERROR.html").render()
-        except KeyError:
+                contents = su2.list_seqs(connection, ENDPOINT, PARAMS, arguments, context)
+                cont_type = 'text/html'
+        elif path_name == "/karyotype":
+            ENDPOINT = "info/assembly/"
+            contents = su2.karyotype(connection, ENDPOINT, PARAMS, arguments, context)
+        elif path_name == "/chromosomeLength":
+            ENDPOINT = "info/assembly/"
+            contents = su2.chromosome_length(connection, ENDPOINT, PARAMS, arguments, context)
+        elif path_name == "/geneSeq":
+            ENDPOINT = "/sequence/id/"
+            contents = su2.geneSeq(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES)
+        elif path_name == "/geneInfo":
+            ENDPOINT = "/sequence/id/"
+            contents = su2.geneInfo(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES)
+        elif path_name == "/geneCalc":
+            ENDPOINT = "/sequence/id/"
+            contents = su2.geneCalc(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES)
+        else:
             contents = su.read_template_html_file(HTML + "ERROR.html").render()
+        """except KeyError:
+            cont_type = 'text/html'
+            contents = su.read_template_html_file(HTML + "ERROR.html").render()"""
 
 
         # Generating the response message
         self.send_response(200)  # -- Status line: OK!
         length = len(contents.encode())
         # Define the content-type header:
-        self.send_header('Content-Type', 'text/html')
+        self.send_header('Content-Type', cont_type)
         self.send_header('Content-Length', str(length))
 
         # The header is finished
         self.end_headers()
 
         # Send the response message
-        self.wfile.write(contents.encode())
+        self.wfile.write(str.encode(contents))
 
         return
 

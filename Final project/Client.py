@@ -1,15 +1,15 @@
 import http.client
 import json
 import termcolor
-PORT = 8081
-SERVER = 'localhost'
+PORT = 8080
+SERVER = '127.0.0.1'
 print(f"\nConnecting to server: {SERVER}:{PORT}\n")
 # Connect with the server
 conn = http.client.HTTPConnection(SERVER, PORT)
 # -- Send the request message, using the GET method. We are
 # -- requesting the main page (/)
 try:
-    conn.request("GET", "/listusers")
+    conn.request("GET", "/listSpecies?limit=10&json=1")
 except ConnectionRefusedError:
     print("ERROR! Cannot connect to the Server")
     exit()
@@ -22,9 +22,10 @@ data1 = r1.read().decode("utf-8")
 print(type(data1))
 # -- Create a variable with the data,
 # -- form the JSON received
-people = json.loads(data1)
-print("Total people in database: " + str(len(people)) + "\nCONTENT: ")
-for person in people:
+information = json.loads(data1)
+print(json.dumps(information, indent=4, sort_keys=True))
+# print("Total people in database: " + str(len(information)) + "\nCONTENT: ")
+"""for person in people:
     # Print the information in the object
     print()
     termcolor.cprint("Name: ", 'green', end="")
@@ -43,4 +44,4 @@ for person in people:
         termcolor.cprint("    Type: ", 'red', end='')
         print(num['type'])
         termcolor.cprint("    Number: ", 'red', end='')
-        print(num['number'])
+        print(num['number'])"""

@@ -8,27 +8,38 @@ def taking_out_space(specie):
     return answer
 
 
-def list_seqs (connection, ENDPOINT, PARAMS, arguments, context):
+def list_seqs(connection, ENDPOINT, PARAMS, arguments, context):
     connection.request("GET", ENDPOINT + PARAMS)
     response = connection.getresponse()
     if response.status == 200:
         response_dict = json.loads(response.read().decode())
         species_list = []
         amount_species = len(response_dict["species"])
-        limit = int(arguments["limit"][0])
-        # print(json.dumps(response_dict, indent=4, sort_keys=True))
-        if limit <= amount_species or limit == amount_species:
-            for n in range(0, limit):
-                species_list.append(response_dict["species"][n]["common_name"])
-            context["names"] = species_list
-        else:
-            for n in range(0, amount_species):
-                species_list.append(response_dict["species"][n]["common_name"])
-            context["names"] = species_list
         context["amount_species"] = amount_species
-        context["limit"] = limit
-        contents = su.read_template_html_file("./HTML/info/list_species.html").render(context=context)
-        return contents
+        # print(json.dumps(response_dict, indent=4, sort_keys=True))
+        if arguments == {}:
+            contents = su.read_template_html_file("./HTML/ERROR.html").render(context=context)
+            return contents
+        else:
+            limit = int(arguments["limit"][0])
+            context["limit"] = limit
+            if limit <= amount_species or limit == amount_species:
+                for n in range(0, limit):
+                    species_list.append(response_dict["species"][n]["common_name"])
+                context["names"] = species_list
+            else:
+                for n in range(0, amount_species):
+                    species_list.append(response_dict["species"][n]["common_name"])
+                context["names"] = species_list
+            if "json" in arguments.keys():
+                if arguments["json"][0] == "1":
+                    # return str(context)
+                    with open("context.json", "w") as file:
+                        json.dump(context, file, indent=4)
+                    return file
+            else:
+                contents = su.read_template_html_file("./HTML/info/list_species.html").render(context=context)
+                return contents
 
 
 def karyotype(connection, ENDPOINT, PARAMS, arguments, context):
@@ -98,6 +109,7 @@ def geneInfo(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES):
         }
         contents = su.read_template_html_file("HTML/Info/geneInfo.html").render(context=context)
         return contents
+
 
 def geneCalc(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES):
     gene = arguments["gene"][0]
