@@ -1,6 +1,8 @@
 import Server_utils as su
 import json
 from Seq import Seq
+from pathlib import Path
+
 
 
 def taking_out_space(specie):
@@ -8,7 +10,7 @@ def taking_out_space(specie):
     return answer
 
 
-def list_seqs(connection, ENDPOINT, PARAMS, arguments, context):
+def list_species(connection, ENDPOINT, PARAMS, arguments, context):
     connection.request("GET", ENDPOINT + PARAMS)
     response = connection.getresponse()
     if response.status == 200:
@@ -34,8 +36,9 @@ def list_seqs(connection, ENDPOINT, PARAMS, arguments, context):
             if "json" in arguments.keys():
                 if arguments["json"][0] == "1":
                     # return str(context)
-                    with open("context.json", "w") as file:
+                    with open("list_species.json", "w") as file:
                         json.dump(context, file, indent=4)
+                        # contents = Path("list_species.json").read_text()
                     return file
             else:
                 contents = su.read_template_html_file("./HTML/info/list_species.html").render(context=context)

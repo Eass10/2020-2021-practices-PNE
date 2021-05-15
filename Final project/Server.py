@@ -72,12 +72,12 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             ENDPOINT = "/info/species"
             if "json" in arguments.keys():
                 if arguments["json"][0] == "1":
-                    su2.list_seqs(connection, ENDPOINT, PARAMS, arguments, context)
-                    contents = Path("context.json").read_text()
+                    su2.list_species(connection, ENDPOINT, PARAMS, arguments, context)
+                    contents = Path("list_species.json").read_text()
                     cont_type = 'application/json'
                     # contents = su2.list_seqs(connection, ENDPOINT, PARAMS, arguments, context)
             else:
-                contents = su2.list_seqs(connection, ENDPOINT, PARAMS, arguments, context)
+                contents = su2.list_species(connection, ENDPOINT, PARAMS, arguments, context)
                 cont_type = 'text/html'
         elif path_name == "/karyotype":
             ENDPOINT = "info/assembly/"
