@@ -4,7 +4,6 @@ from Seq import Seq
 from pathlib import Path
 
 
-
 def taking_out_space(specie):
     answer = specie.replace(" ", "_")
     return answer

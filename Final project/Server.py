@@ -42,7 +42,6 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
     def do_GET(self):
         global contents
-        global cont_type
         # colorama.init(strip="False")
         """This method is called whenever the client invokes the GET method
         in the HTTP protocol request"""
@@ -68,7 +67,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             cont_type = 'text/html'
             context["genes"] = DICT_GENES.keys()
             contents = su.read_template_html_file(HTML_ASSETS + "index.html").render(context=context)
-        elif path_name == "/listSpecies":
+        elif path_name.lower() == "/listspecies":
             ENDPOINT = "/info/species"
             if "json" in arguments.keys():
                 if arguments["json"][0] == "1":
@@ -82,20 +81,26 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         elif path_name == "/karyotype":
             ENDPOINT = "info/assembly/"
             contents = su2.karyotype(connection, ENDPOINT, PARAMS, arguments, context)
+            cont_type = 'text/html'
         elif path_name == "/chromosomeLength":
             ENDPOINT = "info/assembly/"
             contents = su2.chromosome_length(connection, ENDPOINT, PARAMS, arguments, context)
+            cont_type = 'text/html'
         elif path_name == "/geneSeq":
             ENDPOINT = "/sequence/id/"
             contents = su2.geneSeq(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES)
+            cont_type = 'text/html'
         elif path_name == "/geneInfo":
             ENDPOINT = "/sequence/id/"
             contents = su2.geneInfo(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES)
+            cont_type = 'text/html'
         elif path_name == "/geneCalc":
             ENDPOINT = "/sequence/id/"
             contents = su2.geneCalc(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES)
+            cont_type = 'text/html'
         else:
             contents = su.read_template_html_file(HTML + "ERROR.html").render()
+            cont_type = 'text/html'
         """except KeyError:
             cont_type = 'text/html'
             contents = su.read_template_html_file(HTML + "ERROR.html").render()"""
