@@ -17,19 +17,20 @@ def list_species(connection, ENDPOINT, PARAMS, arguments, context):
         # print(json.dumps(response_dict, indent=4, sort_keys=True))
         if arguments == {}:
             contents = su.read_template_html_file("./HTML/ERROR.html").render(context=context)
-            return contents
+            cont_type = 'text/html'
+            return contents, cont_type
         elif len(arguments.keys()) == 1 and "json" in arguments.keys():
+            cont_type = 'application/json'
             context["ERROR"] = "ERROR"
-            with open("ERROR.json", "w") as file:
-                json.dump(context, file, indent=4)
-            return file
+            contents = json.dumps(context, indent=4, sort_keys=True)
+            return contents, cont_type
         else:
             species_list = []
             amount_species = len(response_dict["species"])
             context["amount_species"] = amount_species
             limit = int(arguments["limit"][0])
             context["limit"] = limit
-            if limit <= amount_species or limit == amount_species:
+            if limit < amount_species:
                 for n in range(0, limit):
                     species_list.append(response_dict["species"][n]["common_name"])
                 context["names"] = species_list
@@ -39,15 +40,13 @@ def list_species(connection, ENDPOINT, PARAMS, arguments, context):
                 context["names"] = species_list
             if "json" in arguments.keys():
                 if arguments["json"][0] == "1":
-                    if arguments == {}:
-                        pass
-                    else:
-                        with open("list_species.json", "w") as file:
-                            json.dump(context, file, indent=4)
-                        return file
+                    cont_type = 'application/json'
+                    contents = json.dumps(context, indent=4, sort_keys=True)
+                    return contents, cont_type
             else:
                 contents = su.read_template_html_file("./HTML/info/list_species.html").render(context=context)
-                return contents
+                cont_type = 'text/html'
+                return contents, cont_type
 
 
 def karyotype(connection, ENDPOINT, PARAMS, arguments, context):
