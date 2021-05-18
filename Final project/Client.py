@@ -9,28 +9,22 @@ print(f"\nConnecting to server: {SERVER}:{PORT}\n")
 conn = http.client.HTTPConnection(SERVER, PORT)
 # -- Send the request message, using the GET method. We are
 # -- requesting the main page (/)
+
 try:
-    path_name = input("Introduce what endpoint do you want to see: ")
-    if path_name.lower() == "listspecies":
-        cu.list_species(conn, path_name)
-    elif path_name == "/karyotype":
-        specie = input("Introduce the specie you want to see: ")
-        conn.request("GET", "/" + path_name + "?species=" + specie + "&json=1")
-    elif path_name == "/chromosomeLength":
-        specie = input("Introduce the specie you want to see: ")
-        chromosome = input("Introduce the chromosome you want to see: ")
-        conn.request("GET", "/" + path_name + "?species=" + specie + "&chromosome=" + chromosome + "&json=1")
-    elif path_name == "/geneSeq":
-        gene = input("Introduce the gene you want to see: ")
-        conn.request("GET", "/" + path_name + "?gene=" + gene + "&json=1")
-    elif path_name == "/geneInfo":
-        gene = input("Introduce the gene you want to see: ")
-        conn.request("GET", "/" + path_name + "?gene=" + gene + "&json=1")
-    elif path_name == "/geneCalc":
-        gene = input("Introduce the gene you want to see: ")
-        conn.request("GET", "/" + path_name + "?gene=" + gene + "&json=1")
+    path_name = "listSpecies"
+    n = "10"
+    conn.request("GET", "/" + path_name + "?limit=" + n + "&json=1")
 except ConnectionRefusedError:
     print("ERROR! Cannot connect to the Server")
     exit()
+cu.list_species(conn)
 
-# print("Total people in database: " + str(len(information)) + "\nCONTENT: ")
+
+try:
+    path_name = "listSpecies"
+    n = ""
+    conn.request("GET", "/" + path_name + "?limit=" + n + "&json=1")
+except ConnectionRefusedError:
+    print("ERROR! Cannot connect to the Server")
+    exit()
+cu.list_species(conn)

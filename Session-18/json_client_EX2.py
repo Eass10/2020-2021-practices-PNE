@@ -1,7 +1,7 @@
 import http.client
 import json
 import termcolor
-PORT = 8081
+PORT = 8080
 SERVER = 'localhost'
 print(f"\nConnecting to server: {SERVER}:{PORT}\n")
 # Connect with the server
@@ -19,7 +19,6 @@ r1 = conn.getresponse()
 print(f"Response received!: {r1.status} {r1.reason}\n")
 # -- Read the response's body
 data1 = r1.read().decode("utf-8")
-print(type(data1))
 # -- Create a variable with the data,
 # -- form the JSON received
 people = json.loads(data1)

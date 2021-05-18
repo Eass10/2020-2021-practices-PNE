@@ -14,14 +14,19 @@ def list_species(connection, ENDPOINT, PARAMS, arguments, context):
     response = connection.getresponse()
     if response.status == 200:
         response_dict = json.loads(response.read().decode())
-        species_list = []
-        amount_species = len(response_dict["species"])
-        context["amount_species"] = amount_species
         # print(json.dumps(response_dict, indent=4, sort_keys=True))
         if arguments == {}:
             contents = su.read_template_html_file("./HTML/ERROR.html").render(context=context)
             return contents
+        elif len(arguments.keys()) == 1 and "json" in arguments.keys():
+            context["ERROR"] = "ERROR"
+            with open("ERROR.json", "w") as file:
+                json.dump(context, file, indent=4)
+            return file
         else:
+            species_list = []
+            amount_species = len(response_dict["species"])
+            context["amount_species"] = amount_species
             limit = int(arguments["limit"][0])
             context["limit"] = limit
             if limit <= amount_species or limit == amount_species:
@@ -34,11 +39,12 @@ def list_species(connection, ENDPOINT, PARAMS, arguments, context):
                 context["names"] = species_list
             if "json" in arguments.keys():
                 if arguments["json"][0] == "1":
-                    # return str(context)
-                    with open("list_species.json", "w") as file:
-                        json.dump(context, file, indent=4)
-                        # contents = Path("list_species.json").read_text()
-                    return file
+                    if arguments == {}:
+                        pass
+                    else:
+                        with open("list_species.json", "w") as file:
+                            json.dump(context, file, indent=4)
+                        return file
             else:
                 contents = su.read_template_html_file("./HTML/info/list_species.html").render(context=context)
                 return contents
