@@ -16,12 +16,13 @@ def list_species(connection, ENDPOINT, PARAMS, arguments, context):
         response_dict = json.loads(response.read().decode())
         # print(json.dumps(response_dict, indent=4, sort_keys=True))
         if arguments == {}:
-            contents = su.read_template_html_file("./HTML/ERROR.html").render(context=context)
             cont_type = 'text/html'
+            context["arguments"] = "ERROR"
+            contents = su.read_template_html_file("./HTML/info/list_species.html").render(context=context)
             return contents, cont_type
         elif len(arguments.keys()) == 1 and "json" in arguments.keys():
             cont_type = 'application/json'
-            context["ERROR"] = "ERROR"
+            context["limit"] = "ERROR"
             contents = json.dumps(context, indent=4, sort_keys=True)
             return contents, cont_type
         else:
@@ -44,13 +45,25 @@ def list_species(connection, ENDPOINT, PARAMS, arguments, context):
                     contents = json.dumps(context, indent=4, sort_keys=True)
                     return contents, cont_type
             else:
-                contents = su.read_template_html_file("./HTML/info/list_species.html").render(context=context)
                 cont_type = 'text/html'
+                contents = su.read_template_html_file("./HTML/info/list_species.html").render(context=context)
                 return contents, cont_type
 
 
 def karyotype(connection, ENDPOINT, PARAMS, arguments, context):
-    specie = taking_out_space(arguments["species"][0])
+    try:
+        specie = taking_out_space(arguments["species"][0])
+    except KeyError:
+        if len(arguments.keys()) == 0:
+            cont_type = 'text/html'
+            context["arguments"] = "ERROR"
+            contents = su.read_template_html_file("./HTML/info/karyotype.html").render(context=context)
+            return contents, cont_type
+        elif len(arguments.keys()) == 1 and "json" in arguments.keys():
+            cont_type = 'application/json'
+            context["karyotype"] = "ERROR"
+            contents = json.dumps(context, indent=4, sort_keys=True)
+            return contents, cont_type
     connection.request("GET", ENDPOINT + specie + PARAMS)
     response = connection.getresponse()
     if response.status == 200:
@@ -60,18 +73,66 @@ def karyotype(connection, ENDPOINT, PARAMS, arguments, context):
         # print(karyotype)
         context["species"] = arguments["species"][0]
         context["karyotype"] = karyotype
-        contents = su.read_template_html_file("./HTML/info/karyotype.html").render(context=context)
-        return contents
+        if "json" in arguments.keys():
+            if arguments["json"][0] == "1":
+                cont_type = 'application/json'
+                contents = json.dumps(context, indent=4, sort_keys=True)
+                return contents, cont_type
+        else:
+            cont_type = 'text/html'
+            contents = su.read_template_html_file("./HTML/info/karyotype.html").render(context=context)
+            return contents, cont_type
 
 
 def chromosome_length(connection, ENDPOINT, PARAMS, arguments, context):
-    specie = taking_out_space(arguments["species"][0])
+    try:
+        specie = taking_out_space(arguments["species"][0])
+    except KeyError:
+        if len(arguments.keys()) == 0:
+            cont_type = 'text/html'
+            context["length"] = "ERROR"
+            contents = su.read_template_html_file("./HTML/info/chromosome_length.html").render(context=context)
+            return contents, cont_type
+        elif len(arguments.keys()) == 1:
+            if "chromosome" in arguments.keys():
+                cont_type = 'text/html'
+                context["length"] = "ERROR 2"
+                contents = su.read_template_html_file("./HTML/info/chromosome_length.html").render(context=context)
+                return contents, cont_type
+            if "json" in arguments.keys():
+                cont_type = 'application/json'
+                context["length"] = "ERROR"
+                contents = json.dumps(context, indent=4, sort_keys=True)
+                return contents, cont_type
+        elif len(arguments.keys()) == 2:
+            cont_type = 'application/json'
+            context["length"] = "ERROR 2"
+            contents = json.dumps(context, indent=4, sort_keys=True)
+            return contents, cont_type
     connection.request("GET", ENDPOINT + specie + PARAMS)
     response = connection.getresponse()
     if response.status == 200:
         response_dict = json.loads(response.read().decode())
-        chromosome = arguments["chromosome"][0]
-        # print(json.dumps(response_dict, indent=4, sort_keys=True))
+        try:
+            chromosome = arguments["chromosome"][0]
+            # print(json.dumps(response_dict, indent=4, sort_keys=True))
+        except KeyError:
+            if len(arguments.keys()) == 1:
+                if "species" in arguments.keys():
+                    cont_type = 'text/html'
+                    context["length"] = "ERROR 1"
+                    contents = su.read_template_html_file("./HTML/info/chromosome_length.html").render(context=context)
+                    return contents, cont_type
+                if "json" in arguments.keys():
+                    cont_type = 'application/json'
+                    context["length"] = "ERROR"
+                    contents = json.dumps(context, indent=4, sort_keys=True)
+                    return contents, cont_type
+            elif len(arguments.keys()) == 2:
+                cont_type = 'application/json'
+                context["length"] = "ERROR 1"
+                contents = json.dumps(context, indent=4, sort_keys=True)
+                return contents, cont_type
         for n in range(0, len(response_dict["top_level_region"])):
             if chromosome == response_dict["top_level_region"][n]["name"]:
                 length = response_dict["top_level_region"][n]["length"]
@@ -79,8 +140,16 @@ def chromosome_length(connection, ENDPOINT, PARAMS, arguments, context):
         context["species"] = arguments["species"][0]
         context["chromosome"] = chromosome
         context["length"] = length
-        contents = su.read_template_html_file("./HTML/info/chromosome_length.html").render(context=context)
-        return contents
+        if "json" in arguments.keys():
+            if arguments["json"][0] == "1":
+                cont_type = 'application/json'
+                contents = json.dumps(context, indent=4, sort_keys=True)
+                return contents, cont_type
+        else:
+            cont_type = 'text/html'
+            contents = su.read_template_html_file("./HTML/info/chromosome_length.html").render(context=context)
+            return contents, cont_type
+
 
 
 def geneSeq(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES):

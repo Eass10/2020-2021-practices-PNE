@@ -5,7 +5,16 @@
             <title>DATABASE: CHROMOSOME LENGHT</title>
         </head>
         <body style="background-color: lightgreen;">
-            <h4>The length of the chromosomes {{context.chromosome}} (species -> {{context.species}}) is: {{context.length}}</h4>
+            <h1>Chromosome length</h1>
+            {% if context.length == "ERROR" %}
+                <h4>Not species, nor chromosome selected</h4>
+            {% elif context.length == "ERROR 1" %}
+                <h4>No chromosome selected</h4>
+            {% elif context.length == "ERROR 2" %}
+                <h4>No species selected</h4>
+            {% else %}
+                <h4>The length of the {{context.species}} chromosome {{context.chromosome}} is: {{context.length}}</h4>
+            {% endif %}
             <a href="/">Main page</a>
         </body>
     </html>

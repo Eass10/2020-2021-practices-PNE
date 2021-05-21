@@ -72,24 +72,19 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             contents, cont_type = su2.list_species(connection, ENDPOINT, PARAMS, arguments, context)
         elif path_name == "/karyotype":
             ENDPOINT = "info/assembly/"
-            contents = su2.karyotype(connection, ENDPOINT, PARAMS, arguments, context)
-            cont_type = 'text/html'
+            contents, cont_type = su2.karyotype(connection, ENDPOINT, PARAMS, arguments, context)
         elif path_name == "/chromosomeLength":
             ENDPOINT = "info/assembly/"
-            contents = su2.chromosome_length(connection, ENDPOINT, PARAMS, arguments, context)
-            cont_type = 'text/html'
+            contents, cont_type = su2.chromosome_length(connection, ENDPOINT, PARAMS, arguments, context)
         elif path_name == "/geneSeq":
             ENDPOINT = "/sequence/id/"
-            contents = su2.geneSeq(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES)
-            cont_type = 'text/html'
+            contents, cont_type = su2.geneSeq(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES)
         elif path_name == "/geneInfo":
             ENDPOINT = "/sequence/id/"
-            contents = su2.geneInfo(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES)
-            cont_type = 'text/html'
+            contents, cont_type = su2.geneInfo(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES)
         elif path_name == "/geneCalc":
             ENDPOINT = "/sequence/id/"
-            contents = su2.geneCalc(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES)
-            cont_type = 'text/html'
+            contents, cont_type = su2.geneCalc(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES)
         else:
             contents = su.read_template_html_file(HTML + "ERROR.html").render()
             cont_type = 'text/html'
