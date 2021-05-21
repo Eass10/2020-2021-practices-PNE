@@ -6,7 +6,11 @@
         </head>
         <body style="background-color: lightgreen;">
             <h1>Sequence of gene: {{context.gene}}</h1>
-            <h4>{{context.seq}}</h4>
+            {% if context.seq == "ERROR" %}
+                <h4>No gene selected. Please, select one.</h4>
+            {% else %}
+                <h4>{{context.seq}}</h4>
+            {% endif %}
             <a href="/">Main page</a>
         </body>
     </html>

@@ -6,10 +6,14 @@
         </head>
         <body style="background-color: lightgreen;">
             <h1>Info of gene: {{context.gene}}</h1>
-            <p>Total length: {{context.length}}</p>
+            {% if context.bases == "ERROR" %}
+                <h4>No gene selected. Please, select one.</h4>
+            {% else %}
+                <p>Total length: {{context.length}}</p>
                 {% for key, value in context.bases.items() %}
                     <p>{{key}}: {{value}}</p>
                 {% endfor %}
+            {% endif %}
             <a href="/">Main page</a>
         </body>
     </html>

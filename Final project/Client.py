@@ -1,7 +1,6 @@
 import http.client
 import Client_utils as cu
-import json
-from termcolor import colored, cprint
+from termcolor import cprint
 PORT = 8080
 SERVER = '127.0.0.1'
 list_function = ["listSpecies", "karyotype", "chromosomeLength", "geneSeq", "geneInfo", "geneCalc"]
@@ -16,12 +15,12 @@ for path_name in list_function:
         cprint("1. Testing listSpecies for 10 as the limit...", 'yellow', end="\n")
         n_1 = "10"
         cu.connect(conn, path_name, argument, n_1)
-        cu.list_species(conn)
+        cu.list_species(cu.get_response(conn))
 
         cprint("2. Testing listSpecies for no chosen limit...", 'yellow', end="\n")
         n_2 = ""
         cu.connect(conn, path_name, argument, n_2)
-        cu.list_species(conn)
+        cu.list_species(cu.get_response(conn))
 
     elif path_name == "karyotype":
         cprint("\n---TESTING KARYOTYPE FUNCTION---", 'yellow')
@@ -30,34 +29,76 @@ for path_name in list_function:
         cprint("1. Testing karyotype for human as the species...", 'yellow', end="\n")
         species_1 = "human"
         cu.connect(conn, path_name, argument, species_1)
-        cu.karyotype(conn)
+        cu.karyotype(cu.get_response(conn))
 
         cprint("2. Testing karyotype for no chosen specie...", 'yellow', end="\n")
         species_2 = ""
         cu.connect(conn, path_name, argument, species_2)
-        cu.karyotype(conn)
+        cu.karyotype(cu.get_response(conn))
 
     elif path_name == "chromosomeLength":
         cprint("\n---TESTING CHROMOSOME LENGTH FUNCTION---", 'yellow')
-        argument = "species"
-        argument = "chromosome"
+        argument_1 = "species"
+        argument_2 = "chromosome"
 
         cprint("1. Testing chromosomeLength for human as the species and 18 as the chromosome...", 'yellow', end="\n")
         value_1a = "human"
         value_1b = "18"
-        cu.connect_2(conn, path_name, argument, value_1a, argument, value_1b)
-        cu.chromosome_length(conn)
+        cu.connect_2(conn, path_name, argument_1, value_1a, argument_2, value_1b)
+        cu.chromosome_length(cu.get_response(conn))
 
         cprint("2. Testing chromosomeLength for no chosen species nor chromosome...", 'yellow', end="\n")
         value_2a = ""
         value_2b = ""
-        cu.connect_2(conn, path_name, argument, value_2a, argument, value_2b)
-        cu.chromosome_length(conn)
+        cu.connect_2(conn, path_name, argument_1, value_2a, argument_2, value_2b)
+        cu.chromosome_length(cu.get_response(conn))
 
         cprint("3. Testing chromosomeLength for no chosen chromosome...", 'yellow', end="\n")
-        cu.connect_2(conn, path_name, argument, value_1a, argument, value_2b)
-        cu.chromosome_length(conn)
+        cu.connect_2(conn, path_name, argument_1, value_1a, argument_2, value_2b)
+        cu.chromosome_length(cu.get_response(conn))
 
         cprint("4. Testing chromosomeLength for no chosen species...", 'yellow', end="\n")
-        cu.connect_2(conn, path_name, argument, value_2a, argument, value_1b)
-        cu.chromosome_length(conn)
+        cu.connect_2(conn, path_name, argument_1, value_2a, argument_2, value_1b)
+        cu.chromosome_length(cu.get_response(conn))
+
+    elif path_name == "geneSeq":
+        cprint("\n---TESTING GENE SEQUENCE FUNCTION---", 'yellow')
+        argument = "gene"
+
+        cprint("1. Testing geneSeq for ADA as the gene...", 'yellow', end="\n")
+        gene_1 = "ADA"
+        cu.connect(conn, path_name, argument, gene_1)
+        cu.geneSeq(cu.get_response(conn))
+
+        cprint("2. Testing geneSeq for no chosen gene...", 'yellow', end="\n")
+        gene_2 = ""
+        cu.connect(conn, path_name, argument, gene_2)
+        cu.geneSeq(cu.get_response(conn))
+
+    elif path_name == "geneInfo":
+        cprint("\n---TESTING GENE INFORMATION FUNCTION---", 'yellow')
+        argument = "gene"
+
+        cprint("1. Testing geneInfo for ADA as the gene...", 'yellow', end="\n")
+        gene_1 = "ADA"
+        cu.connect(conn, path_name, argument, gene_1)
+        cu.geneInfo(cu.get_response(conn))
+
+        cprint("2. Testing geneInfo for no chosen gene...", 'yellow', end="\n")
+        gene_2 = ""
+        cu.connect(conn, path_name, argument, gene_2)
+        cu.geneInfo(cu.get_response(conn))
+
+    elif path_name == "geneCalc":
+        cprint("\n---TESTING GENE CALCULATION FUNCTION---", 'yellow')
+        argument = "gene"
+
+        cprint("1. Testing geneCalc for ADA as the gene...", 'yellow', end="\n")
+        gene_1 = "ADA"
+        cu.connect(conn, path_name, argument, gene_1)
+        cu.geneCalc(cu.get_response(conn))
+
+        cprint("2. Testing geneCalc for no chosen gene...", 'yellow', end="\n")
+        gene_2 = ""
+        cu.connect(conn, path_name, argument, gene_2)
+        cu.geneCalc(cu.get_response(conn))

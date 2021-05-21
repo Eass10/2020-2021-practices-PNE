@@ -6,7 +6,7 @@
         </head>
         <body style="background-color: lightgreen;">
             <h1>Karyotype</h1>
-            {% if context.arguments == "ERROR" %}
+            {% if context.karyotype == "ERROR" %}
                 <h4>No species chosen. Please select a species.</h4>
             {% else %}
                 <h1>Karyotype of {{context.species}}</h1>

@@ -5,7 +5,6 @@ import colorama
 import Server_utils as su
 import Server_utils_2 as su2
 from urllib.parse import urlparse, parse_qs
-from pathlib import Path
 import http.client
 
 
@@ -62,35 +61,35 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         # that everything is ok
         # Message to send back to the client
         context = {}
-        """try:"""
-        if path_name == "/":
+        try:
+            if path_name == "/":
+                cont_type = 'text/html'
+                context["genes"] = DICT_GENES.keys()
+                contents = su.read_template_html_file(HTML_ASSETS + "index.html").render(context=context)
+            elif path_name.lower() == "/listspecies":
+                ENDPOINT = "/info/species"
+                contents, cont_type = su2.list_species(connection, ENDPOINT, PARAMS, arguments, context)
+            elif path_name == "/karyotype":
+                ENDPOINT = "info/assembly/"
+                contents, cont_type = su2.karyotype(connection, ENDPOINT, PARAMS, arguments, context)
+            elif path_name == "/chromosomeLength":
+                ENDPOINT = "info/assembly/"
+                contents, cont_type = su2.chromosome_length(connection, ENDPOINT, PARAMS, arguments, context)
+            elif path_name == "/geneSeq":
+                ENDPOINT = "/sequence/id/"
+                contents, cont_type = su2.geneSeq(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES)
+            elif path_name == "/geneInfo":
+                ENDPOINT = "/sequence/id/"
+                contents, cont_type = su2.geneInfo(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES)
+            elif path_name == "/geneCalc":
+                ENDPOINT = "/sequence/id/"
+                contents, cont_type = su2.geneCalc(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES)
+            else:
+                contents = su.read_template_html_file(HTML + "ERROR.html").render()
+                cont_type = 'text/html'
+        except KeyError:
             cont_type = 'text/html'
-            context["genes"] = DICT_GENES.keys()
-            contents = su.read_template_html_file(HTML_ASSETS + "index.html").render(context=context)
-        elif path_name.lower() == "/listspecies":
-            ENDPOINT = "/info/species"
-            contents, cont_type = su2.list_species(connection, ENDPOINT, PARAMS, arguments, context)
-        elif path_name == "/karyotype":
-            ENDPOINT = "info/assembly/"
-            contents, cont_type = su2.karyotype(connection, ENDPOINT, PARAMS, arguments, context)
-        elif path_name == "/chromosomeLength":
-            ENDPOINT = "info/assembly/"
-            contents, cont_type = su2.chromosome_length(connection, ENDPOINT, PARAMS, arguments, context)
-        elif path_name == "/geneSeq":
-            ENDPOINT = "/sequence/id/"
-            contents, cont_type = su2.geneSeq(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES)
-        elif path_name == "/geneInfo":
-            ENDPOINT = "/sequence/id/"
-            contents, cont_type = su2.geneInfo(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES)
-        elif path_name == "/geneCalc":
-            ENDPOINT = "/sequence/id/"
-            contents, cont_type = su2.geneCalc(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES)
-        else:
             contents = su.read_template_html_file(HTML + "ERROR.html").render()
-            cont_type = 'text/html'
-        """except KeyError:
-            cont_type = 'text/html'
-            contents = su.read_template_html_file(HTML + "ERROR.html").render()"""
 
 
         # Generating the response message

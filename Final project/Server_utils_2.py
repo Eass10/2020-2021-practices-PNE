@@ -1,7 +1,6 @@
 import Server_utils as su
 import json
 from Seq import Seq
-from pathlib import Path
 
 
 def taking_out_space(specie):
@@ -17,7 +16,7 @@ def list_species(connection, ENDPOINT, PARAMS, arguments, context):
         # print(json.dumps(response_dict, indent=4, sort_keys=True))
         if arguments == {}:
             cont_type = 'text/html'
-            context["arguments"] = "ERROR"
+            context["limit"] = "ERROR"
             contents = su.read_template_html_file("./HTML/info/list_species.html").render(context=context)
             return contents, cont_type
         elif len(arguments.keys()) == 1 and "json" in arguments.keys():
@@ -56,10 +55,10 @@ def karyotype(connection, ENDPOINT, PARAMS, arguments, context):
     except KeyError:
         if len(arguments.keys()) == 0:
             cont_type = 'text/html'
-            context["arguments"] = "ERROR"
+            context["karyotype"] = "ERROR"
             contents = su.read_template_html_file("./HTML/info/karyotype.html").render(context=context)
             return contents, cont_type
-        elif len(arguments.keys()) == 1 and "json" in arguments.keys():
+        elif len(arguments.keys()) == 1:
             cont_type = 'application/json'
             context["karyotype"] = "ERROR"
             contents = json.dumps(context, indent=4, sort_keys=True)
@@ -151,29 +150,59 @@ def chromosome_length(connection, ENDPOINT, PARAMS, arguments, context):
             return contents, cont_type
 
 
-
 def geneSeq(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES):
-    gene = arguments["gene"][0]
+    try:
+        gene = arguments["gene"][0]
+    except KeyError:
+        if len(arguments.keys()) == 0:
+            cont_type = 'text/html'
+            context["seq"] = "ERROR"
+            contents = su.read_template_html_file("./HTML/info/geneSeq.html").render(context=context)
+            return contents, cont_type
+        elif len(arguments.keys()) == 1:
+            cont_type = 'application/json'
+            context["seq"] = "ERROR"
+            contents = json.dumps(context, indent=4, sort_keys=True)
+            return contents, cont_type
     id = DICT_GENES[gene]
     connection.request("GET", ENDPOINT + id + PARAMS)
     response = connection.getresponse()
     if response.status == 200:
         response_dict = json.loads(response.read().decode())
-        print(json.dumps(response_dict, indent=4, sort_keys=True))
+        # print(json.dumps(response_dict, indent=4, sort_keys=True))
         context["gene"] = arguments["gene"][0]
         context["seq"] = response_dict["seq"]
-        contents = su.read_template_html_file("HTML/Info/geneSeq.html").render(context=context)
-        return contents
+        if "json" in arguments.keys():
+            if arguments["json"][0] == "1":
+                cont_type = 'application/json'
+                contents = json.dumps(context, indent=4, sort_keys=True)
+                return contents, cont_type
+        else:
+            cont_type = 'text/html'
+            contents = su.read_template_html_file("./HTML/info/geneSeq.html").render(context=context)
+            return contents, cont_type
 
 
 def geneInfo(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES):
-    gene = arguments["gene"][0]
+    try:
+        gene = arguments["gene"][0]
+    except KeyError:
+        if len(arguments.keys()) == 0:
+            cont_type = 'text/html'
+            context["dict_info"] = "ERROR"
+            contents = su.read_template_html_file("./HTML/info/geneInfo.html").render(context=context)
+            return contents, cont_type
+        elif len(arguments.keys()) == 1:
+            cont_type = 'application/json'
+            context["dict_info"] = "ERROR"
+            contents = json.dumps(context, indent=4, sort_keys=True)
+            return contents, cont_type
     id = DICT_GENES[gene]
     connection.request("GET", ENDPOINT + id + PARAMS)
     response = connection.getresponse()
     if response.status == 200:
         response_dict = json.loads(response.read().decode())
-        print(json.dumps(response_dict, indent=4, sort_keys=True))
+        # print(json.dumps(response_dict, indent=4, sort_keys=True))
         info = response_dict["desc"].split(":")
         context["gene"] = gene
         context["dict_info"] = {
@@ -183,20 +212,40 @@ def geneInfo(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES):
             "End": info[4],
             "Length": (int(info[4]) - int(info[3]) + 1)
         }
-        contents = su.read_template_html_file("HTML/Info/geneInfo.html").render(context=context)
-        return contents
+        if "json" in arguments.keys():
+            if arguments["json"][0] == "1":
+                cont_type = 'application/json'
+                contents = json.dumps(context, indent=4, sort_keys=True)
+                return contents, cont_type
+        else:
+            cont_type = 'text/html'
+            contents = su.read_template_html_file("./HTML/info/geneInfo.html").render(context=context)
+            return contents, cont_type
 
 
 def geneCalc(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES):
-    gene = arguments["gene"][0]
+    try:
+        gene = arguments["gene"][0]
+    except KeyError:
+        if len(arguments.keys()) == 0:
+            cont_type = 'text/html'
+            context["bases"] = "ERROR"
+            contents = su.read_template_html_file("./HTML/info/geneCalc.html").render(context=context)
+            return contents, cont_type
+        elif len(arguments.keys()) == 1:
+            cont_type = 'application/json'
+            context["bases"] = "ERROR"
+            contents = json.dumps(context, indent=4, sort_keys=True)
+            return contents, cont_type
     id = DICT_GENES[gene]
     connection.request("GET", ENDPOINT + id + PARAMS)
     response = connection.getresponse()
     if response.status == 200:
         response_dict = json.loads(response.read().decode())
-        print(json.dumps(response_dict, indent=4, sort_keys=True))
+        # print(json.dumps(response_dict, indent=4, sort_keys=True))
         sequence = Seq(response_dict["seq"])
         dict_bases, percentage_list = Seq.count_base_2(sequence)
+        context["gene"] = gene
         context["length"] = Seq.len(sequence)
         context["bases"] = {
             "A": str(dict_bases["A"]) + " (" + str(percentage_list[0]) + "%)",
@@ -204,5 +253,12 @@ def geneCalc(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES):
             "T": str(dict_bases["T"]) + " (" + str(percentage_list[2]) + "%)",
             "G": str(dict_bases["G"]) + " (" + str(percentage_list[3]) + "%)"
         }
-        contents = su.read_template_html_file("HTML/Info/geneCalc.html").render(context=context)
-        return contents
+        if "json" in arguments.keys():
+            if arguments["json"][0] == "1":
+                cont_type = 'application/json'
+                contents = json.dumps(context, indent=4, sort_keys=True)
+                return contents, cont_type
+        else:
+            cont_type = 'text/html'
+            contents = su.read_template_html_file("./HTML/info/geneCalc.html").render(context=context)
+            return contents, cont_type

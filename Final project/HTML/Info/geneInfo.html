@@ -6,9 +6,13 @@
         </head>
         <body style="background-color: lightgreen;">
             <h1>Info of gene: {{context.gene}}</h1>
-            {% for key, value in context.dict_info.items() %}
-                <p>{{key}}: {{value}}</p>
-            {% endfor %}
+            {% if context.info == "ERROR" %}
+                <h4>No gene selected. Please, select one.</h4>
+            {% else %}
+                {% for key, value in context.dict_info.items() %}
+                    <p>{{key}}: {{value}}</p>
+                {% endfor %}
+            {% endif %}
             <a href="/">Main page</a>
         </body>
     </html>

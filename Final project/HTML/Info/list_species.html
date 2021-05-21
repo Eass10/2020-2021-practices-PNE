@@ -6,7 +6,7 @@
         </head>
         <body style="background-color: lightgreen;">
             <h1>List of species</h1>
-            {% if context.arguments == "ERROR" %}
+            {% if context.limit == "ERROR" %}
                 <h4>No limit chosen. Please select a limit.</h4>
             {% elif context.limit <= context.amount_species %}
                 <h4>Total species in the ensembl database: {{context.amount_species}}</h4>
