@@ -206,7 +206,7 @@ def geneInfo(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES):
         info = response_dict["desc"].split(":")
         context["gene"] = gene
         context["dict_info"] = {
-            "Name": info[1],
+            "Name": info[2],
             "ID": id,
             "Start": info[3],
             "End": info[4],
