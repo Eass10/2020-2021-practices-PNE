@@ -90,7 +90,15 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         except KeyError:
             cont_type = 'text/html'
             contents = su.read_template_html_file(HTML + "ERROR.html").render()
-
+        except ValueError:
+            cont_type = 'text/html'
+            contents = su.read_template_html_file(HTML + "ERROR.html").render()
+        except TypeError:
+            cont_type = 'text/html'
+            contents = su.read_template_html_file(HTML + "ERROR.html").render()
+        except UnboundLocalError:
+            cont_type = 'text/html'
+            contents = su.read_template_html_file(HTML + "ERROR.html").render()
 
         # Generating the response message
         self.send_response(200)  # -- Status line: OK!

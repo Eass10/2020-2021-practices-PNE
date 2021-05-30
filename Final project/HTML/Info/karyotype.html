@@ -9,12 +9,13 @@
             {% if context.karyotype == "ERROR" %}
                 <h4>No species chosen. Please select a species.</h4>
             {% else %}
-                <h1>Karyotype of {{context.species}}</h1>
+                <h3>{{context.species}} karyotype</h3>
                 <h4>The name of the chromosomes:</h4>
                 {% for n in context.karyotype %}
-                  <option value="{{n}}">{{n}}</option>
+                  <li>{{n}}</li>
                 {% endfor %}
             {% endif %}
+            <br>
             <a href="/">Main page</a>
         </body>
     </html>
