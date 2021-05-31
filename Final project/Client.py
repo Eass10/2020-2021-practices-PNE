@@ -4,6 +4,7 @@ from termcolor import cprint
 PORT = 8080
 SERVER = '127.0.0.1'
 list_function = ["listSpecies", "karyotype", "chromosomeLength", "geneSeq", "geneInfo", "geneCalc"]
+print("\nAdvance level services")
 print(f"\nConnecting to server: {SERVER}:{PORT}\n")
 
 conn = http.client.HTTPConnection(SERVER, PORT)
