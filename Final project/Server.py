@@ -63,9 +63,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         context = {}
         try:
             if path_name == "/":
-                cont_type = 'text/html'
-                context["genes"] = DICT_GENES.keys()
-                contents = su.read_template_html_file(HTML_ASSETS + "index.html").render(context=context)
+                contents, cont_type = su2.index(arguments, context, DICT_GENES)
             elif path_name.lower() == "/listspecies":
                 ENDPOINT = "/info/species"
                 contents, cont_type = su2.list_species(connection, ENDPOINT, PARAMS, arguments, context)

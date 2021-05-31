@@ -8,6 +8,31 @@ def taking_out_space(specie):
     return answer
 
 
+def index(arguments, context, DICT_GENES):
+    context["genes"] = DICT_GENES.keys()
+    if "json" in arguments.keys():
+        if arguments["json"][0] == "1":
+            context = {
+                "Basic level": [
+                    "1) Species list (a limit is required)",
+                    "2) Species karyotype (a species is required)",
+                    "3) Chromosome length (a species and a chromosome are required)"
+                ],
+                "Medium level": [
+                    "4) Gene sequence (a gene is required)",
+                    "5) Gene information (a gene is required)",
+                    "6) Gene calculations (a gene is required)",
+                ]
+            }
+            cont_type = 'application/json'
+            contents = json.dumps(context, indent=4, sort_keys=True)
+            return contents, cont_type
+    else:
+        cont_type = 'text/html'
+        contents = su.read_template_html_file("./HTML/info/index.html").render(context=context)
+        return contents, cont_type
+
+
 def list_species(connection, ENDPOINT, PARAMS, arguments, context):
     connection.request("GET", ENDPOINT + PARAMS)
     response = connection.getresponse()
@@ -206,7 +231,7 @@ def geneInfo(connection, ENDPOINT, PARAMS, arguments, context, DICT_GENES):
         info = response_dict["desc"].split(":")
         context["gene"] = gene
         context["dict_info"] = {
-            "Name": info[1],
+            "Name": info[2],
             "ID": id,
             "Start": info[3],
             "End": info[4],

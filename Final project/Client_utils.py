@@ -2,17 +2,14 @@ import json
 from termcolor import cprint
 
 
-def connect(conn, path_name, argument, value):
+def connect(conn, path_name, argument, value, value_2):
     try:
-        conn.request("GET", "/" + path_name + "?" + argument + "=" + value + "&json=1")
-    except ConnectionRefusedError:
-        print("ERROR! Cannot connect to the Server")
-        exit()
-
-
-def connect_2(conn, path_name, argument_1, value_1, argument_2, value_2):
-    try:
-        conn.request("GET", "/" + path_name + "?" + argument_1 + "=" + value_1 + "&" + argument_2 + "=" + value_2 + "&json=1")
+        if path_name == "/":
+            conn.request("GET", "/?json=1")
+        elif path_name == "chromosomeLength":
+            conn.request("GET", "/" + path_name + "?species=" + value + "&chromosome=" + value_2 + "&json=1")
+        else:
+            conn.request("GET", "/" + path_name + "?" + argument + "=" + value + "&json=1")
     except ConnectionRefusedError:
         print("ERROR! Cannot connect to the Server")
         exit()
@@ -25,6 +22,13 @@ def get_response(conn):
     information = json.loads(data1)
     # print(json.dumps(information, indent=4, sort_keys=True))
     return information
+
+
+def index(information):
+    for option in information["Basic level"]:
+        print(option)
+    for option in information["Medium level"]:
+        print(option)
 
 
 def list_species(information):
