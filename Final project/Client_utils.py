@@ -35,7 +35,7 @@ def list_species(information):
         print(information['amount_species'])
         cprint("The limit you have chosen:", 'green', end=" ")
         print(information['limit'])
-        cprint("List of species: ", 'blue')
+        cprint("List of species: ", 'green')
         for species in information['names']:
             print(" · " + species)
 
