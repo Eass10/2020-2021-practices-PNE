@@ -5,10 +5,11 @@
             <title>DATABASE: CALCULATIONS WITH GENES</title>
         </head>
         <body style="background-color: lightgreen;">
-            <h1>Info of gene: {{context.gene}}</h1>
+            <h1>Info of gene:</h1>
             {% if context.bases == "ERROR" %}
                 <h4>No gene selected. Please, select one.</h4>
             {% else %}
+                <h2>{{context.gene}}</h2>
                 <p>Total length: {{context.length}}</p>
                 {% for key, value in context.bases.items() %}
                     <p>{{key}}: {{value}}</p>
