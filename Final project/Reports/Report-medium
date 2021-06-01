@@ -2639,7 +2639,7 @@ TEST 2
             <title>DATABASE: INFORMATION OF GENE</title>
         </head>
         <body style="background-color: lightgreen;">
-            <h1>Info of gene:</h1>
+            <h1>Gene information:</h1>
 
                 <h2>ADA</h2>
 
@@ -2669,7 +2669,7 @@ TEST 3
             <title>DATABASE: INFORMATION OF GENE</title>
         </head>
         <body style="background-color: lightgreen;">
-            <h1>Info of gene:</h1>
+            <h1>Gene information:</h1>
 
                 <h2>FXN</h2>
 
@@ -2699,7 +2699,7 @@ TEST 4
             <title>DATABASE: INFORMATION OF GENE</title>
         </head>
         <body style="background-color: lightgreen;">
-            <h1>Info of gene:</h1>
+            <h1>Gene information:</h1>
 
                 <h2>KDR</h2>
 
@@ -2767,7 +2767,7 @@ TEST 2
             <title>DATABASE: CALCULATIONS WITH GENES</title>
         </head>
         <body style="background-color: lightgreen;">
-            <h1>Info of gene:</h1>
+            <h1>Gene calculations:</h1>
 
                 <h2>ADA</h2>
                 <p>Total length: 32712</p>
@@ -2796,7 +2796,7 @@ TEST 3
             <title>DATABASE: CALCULATIONS WITH GENES</title>
         </head>
         <body style="background-color: lightgreen;">
-            <h1>Info of gene:</h1>
+            <h1>Gene calculations:</h1>
 
                 <h2>FXN</h2>
                 <p>Total length: 43326</p>
@@ -2825,7 +2825,7 @@ TEST 4
             <title>DATABASE: CALCULATIONS WITH GENES</title>
         </head>
         <body style="background-color: lightgreen;">
-            <h1>Info of gene:</h1>
+            <h1>Gene calculations:</h1>
 
                 <h2>FRAT1</h2>
                 <p>Total length: 2645</p>
